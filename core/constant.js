@@ -26,6 +26,9 @@ export const responseMessage = {
   NOT_ELIGIBLE_TO_BUY_VEHICLE: "You can't buy this vehicle because you are Seller",
   VEHICLE_BUY_SUCCESS: "Vehicle Buy Successfully",
   VEHICLE_NOT_FOUND: "Vehicle Not Found Please Try again later",
+  SELLER_WALLET_NOT_FOUND: "Seller wallet not found",
+  ADMIN_WALLET_NOT_FOUND: "Admin wallet not found",
+
 
   // Testing Messages
   MANUAL_ERR: "ARPIT",
