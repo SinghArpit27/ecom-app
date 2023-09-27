@@ -25,6 +25,7 @@ export const responseMessage = {
   INSUFFICIENT_AMOUNT: "Youd Don't have sufficient Amount, Please Add Money in Wallet",
   NOT_ELIGIBLE_TO_BUY_VEHICLE: "You can't buy this vehicle because you are Seller",
   VEHICLE_BUY_SUCCESS: "Vehicle Buy Successfully",
+  VEHICLE_NOT_FOUND: "Vehicle Not Found Please Try again later",
 
   // Testing Messages
   MANUAL_ERR: "ARPIT",

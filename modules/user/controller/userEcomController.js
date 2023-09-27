@@ -3,6 +3,7 @@ import User from '../../../models/userSchema.js';
 import httpResponse from '../../../helper/httpResponse.js';
 import { responseMessage, responseStatus, statusCode } from '../../../core/constant.js';
 import Vehicle from '../../../models/vehicleSchema.js';
+import schedule from 'node-schedule';
 
 
 // Activate User Wallet Controller
@@ -216,4 +217,139 @@ export const buyVehicleController = async(req,res) => {
     }
 }
 
-// EMI Invoice Generate Function
+// EMI Payment Function
+const buyVehicleWithEMI = async(userId, vehicleId, emiTerm) => {
+    try {
+        
+        const userData = await User.findOne({ _id: userId });
+        if(userData){
+            const vehicleData = await Vehicle.findOne({ _id: vehicleId });
+            if(vehicleData){
+                const walletData = await Wallet.findOne({ userId: userId });
+                if(walletData){
+                    // EMI Calculation
+                    const interestRate = 0.1; // 10% annual interest
+                    const principalAmount = vehicleData.vehicle_price;
+                    const emiAmount = (principalAmount * interestRate) / 12 / (1 - Math.pow(1 + interestRate / 12, -emiTerm));
+                    if(walletData.wallet_amount >= emiAmount){
+
+                        // Calculate the due date for the first EMI installment
+                        const currentDate = new Date();
+                        const dueDate = new Date(currentDate);
+                        dueDate.setMonth(currentDate.getMonth() + 1); // First EMI due next month
+
+                    }else{
+                        httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.INSUFFICIENT_AMOUNT);
+                    }
+                }else{
+                    httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.ALERT_ACTIVATE_WALLET);
+                }
+            }else{
+                httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.VEHICLE_NOT_FOUND)
+            }
+        }else{
+            httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.UNAUTHORIZED);
+        }
+        
+    } catch (error) {
+        httpResponse(res, statusCode.INTERNAL_SERVER_ERROR, responseStatus.FAILURE, responseMessage.INTERNAL_SERVER_ERROR);
+    }
+}
+
+// example function
+export const buyVehicleWithEMIController = async (req, res) => {
+    try {
+        const emiTerm = req.body.emiTerm; // User input for EMI term
+        const interestRate = 0.1; // 10% annual interest
+        const vehicleId = req.params.id;
+
+        // Calculate the EMI amount
+        const vehicleData = await Vehicle.findOne({ _id: vehicleId });
+        if (!vehicleData) {
+            return httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.VEHICLE_NOT_FOUND);
+        }
+
+        const principalAmount = vehicleData.vehicle_price;
+        const emiAmount = (principalAmount * interestRate) / 12 / (1 - Math.pow(1 + interestRate / 12, -emiTerm));
+
+        // Check if the user has sufficient funds for the first EMI
+        const userData = await User.findOne({ _id: req.userId });
+        if (!userData) {
+            return httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.UNAUTHORIZED);
+        }
+
+        const walletData = await Wallet.findOne({ userId: req.userId });
+        if (!walletData || walletData.wallet_amount < emiAmount) {
+            return httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.INSUFFICIENT_AMOUNT);
+        }
+
+        // Calculate the due date for the first EMI installment
+        const currentDate = new Date();
+        const dueDate = new Date(currentDate);
+        dueDate.setMonth(currentDate.getMonth() + 1); // First EMI due next month
+
+        // Schedule automatic EMI deductions
+        const job = schedule.scheduleJob(dueDate, async function () {
+            try {
+                // Deduct EMI from the buyer's wallet
+                const updatedWalletAmount = walletData.wallet_amount - emiAmount;
+                await Wallet.findByIdAndUpdate(walletData._id, { $set: { wallet_amount: updatedWalletAmount } });
+
+                // Add EMI to the seller's wallet
+                const sellerWallet = await Wallet.findOne({ userId: vehicleData.seller_userId });
+                if (!sellerWallet) {
+                    throw new Error('Seller wallet not found');
+                }
+                const updatedSellerWalletAmount = sellerWallet.wallet_amount + emiAmount;
+                await Wallet.findByIdAndUpdate(sellerWallet._id, { $set: { wallet_amount: updatedSellerWalletAmount } });
+
+                // Calculate and add interest to the admin's wallet
+                const interestAmount = emiAmount * (interestRate / 12);
+                const adminWallet = await Wallet.findById('6513e92916bb7f8755a473b4');
+                if (!adminWallet) {
+                    throw new Error('Admin wallet not found');
+                }
+                const updatedAdminWalletAmount = adminWallet.wallet_amount + interestAmount;
+                await Wallet.findByIdAndUpdate(adminWallet._id, { $set: { wallet_amount: updatedAdminWalletAmount } });
+
+                // Update the EMI record in the database
+                const emiRecord = new EMIRow({
+                    buyerUserId: req.userId,
+                    sellerUserId: vehicleData.seller_userId,
+                    vehicleId: vehicleId,
+                    emiTerm: emiTerm,
+                    emiAmount: emiAmount,
+                    dueDate: dueDate,
+                });
+                await emiRecord.save();
+
+                // Check if EMI term is completed
+                if (emiRecord.emiTerm <= 1) {
+                    // Mark the vehicle as sold if it's not already
+                    if (!vehicleData.vehicle_sold) {
+                        await Vehicle.findByIdAndUpdate(vehicleId, { $set: { vehicle_sold: true } });
+                    }
+                    // Cancel the scheduled job
+                    job.cancel();
+                } else {
+                    // Calculate due date for the next EMI installment
+                    dueDate.setMonth(dueDate.getMonth() + 1);
+                }
+
+            } catch (error) {
+                console.error('Error processing EMI:', error);
+            }
+        });
+
+        // Deduct the first EMI amount from the buyer's wallet
+        const updatedWalletAmount = walletData.wallet_amount - emiAmount;
+        await Wallet.findByIdAndUpdate(walletData._id, { $set: { wallet_amount: updatedWalletAmount } });
+
+        // Success response
+        httpResponse(res, statusCode.OK, responseStatus.SUCCESS, responseMessage.VEHICLE_BUY_SUCCESS);
+
+    } catch (error) {
+        console.error('EMI purchase error:', error);
+        httpResponse(res, statusCode.INTERNAL_SERVER_ERROR, responseStatus.FAILURE, responseMessage.INTERNAL_SERVER_ERROR, error.message);
+    }
+};
