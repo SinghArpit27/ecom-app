@@ -1,6 +1,6 @@
 import express from 'express';
 import { authenticateToken } from '../../../middleware/jwtAuthorization.js';
-import { addMoneyController, addVehicleController, buyVehicleController, buyVehicleWithEMI, checkWalletBalance, createWalletController, getAllVehicleController } from '../controller/userEcomController.js';
+import { addMoneyController, addVehicleController, buyVehicleWithEMI, buyVehicleWithOneTimePayment, checkWalletBalance, createWalletController, getAllVehicleController } from '../controller/userEcomController.js';
 import { expressValidationResult } from '../../../helper/validationError.js';
 import { amountValidation } from '../../../middleware/ecomValidation.js';
 import upload from '../../../middleware/imageUpload.js';
@@ -27,8 +27,11 @@ route.post('/add-vehicle', upload.single('vehicle_image'), addVehicleController)
 route.get('/all-vehicle', getAllVehicleController);
 
 // Buy vehicle Route
-// route.post('/buy-vehicle/:id', buyVehicleController);
-route.post('/buy-vehicle/:id', buyVehicleWithEMI);
+// One Time Payment
+route.post('/buy-vehicle-one-time-payment/:id', buyVehicleWithOneTimePayment);
+
+// EMI Payment
+route.post('/buy-vehicle-emi/:id', buyVehicleWithEMI);
 
 
 

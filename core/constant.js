@@ -28,6 +28,8 @@ export const responseMessage = {
   VEHICLE_NOT_FOUND: "Vehicle Not Found Please Try again later",
   SELLER_WALLET_NOT_FOUND: "Seller wallet not found",
   ADMIN_WALLET_NOT_FOUND: "Admin wallet not found",
+  USER_DELETED_SUCCESS: "User deleted successfully",
+  USER_DELETED_ALERT: "You can't Login, Your Account is Deleted",
 
 
   // Testing Messages

@@ -1,0 +1,496 @@
+{
+	"info": {
+		"_postman_id": "967b1365-23e0-4568-8f9c-6bacdfe182ec",
+		"name": "e-commerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20630793"
+	},
+	"item": [
+		{
+			"name": "User Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Alex Luther\",\r\n    \"email\": \"alex@gmail.com\",\r\n    \"phone\": 9369788355,\r\n    \"password\": \"alex\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/register",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"arpit@gmail.com\",\r\n    \"password\": \"arpit\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Renew Access Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTE0MjAzZTFhMjY0YTgwZDA0MTc2MTQiLCJpYXQiOjE2OTU4NzY0NDAsImV4cCI6MTY5NTg4MzY0MH0.F-iPTVVdn9R_kDG8QrOf6yUQjL0XbNUV8jRGWos1sQs\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/renewAccessToken",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"renewAccessToken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Forget Password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"arpit@gmail.com\",\r\n    \"password\": \"1111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/forgetPassword",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"forgetPassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTEzY2UzOGVkYjc2ZGQ5NTFjZmE0NTMiLCJpYXQiOjE2OTU3OTg2MDIsImV4cCI6MTY5NTc5OTUwMn0.7oammhQnLfNPCugFggf5a8ApwyUGsJ5GraJpOhLKE4w",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"password\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/changePassword",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"changePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Profile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTEzY2UzOGVkYjc2ZGQ5NTFjZmE0NTMiLCJpYXQiOjE2OTU4MDM1MzQsImV4cCI6MTY5NTgwNDQzNH0.IjJWYkBwHmJq_9e5867611aes_DS5XpB346nulyvMtA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Admin\",\r\n    \"email\": \"admin@gmail.com\",\r\n    \"phone\": 1234567890\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/updateProfile",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"updateProfile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activate Wallet",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTE0MjAzZTFhMjY0YTgwZDA0MTc2MTQiLCJpYXQiOjE2OTU4MTc4MDksImV4cCI6MTY5NTgxODcwOX0.XvEBI11gA6De6xT1Qkbew32CyQnB6uVxCL3WUnuL9ZM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:3000/ecom/activate-wallet",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"ecom",
+						"activate-wallet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Money",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTEzZDcyZjYyM2VkMTYyNGNkZGM4ODMiLCJpYXQiOjE2OTU4MDcwODIsImV4cCI6MTY5NTgwNzk4Mn0.XzChzQ6mgCh4vQthsAOutPCRuY1G_ArSmNAaa2YV54I",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 10000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/ecom/add-money",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"ecom",
+						"add-money"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Balance",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTEzZDcyZjYyM2VkMTYyNGNkZGM4ODMiLCJpYXQiOjE2OTU4MDcwODIsImV4cCI6MTY5NTgwNzk4Mn0.XzChzQ6mgCh4vQthsAOutPCRuY1G_ArSmNAaa2YV54I",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:3000/ecom/check-balance",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"ecom",
+						"check-balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Vehicle",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTEzZDcyZjYyM2VkMTYyNGNkZGM4ODMiLCJpYXQiOjE2OTU4MTE4NDcsImV4cCI6MTY5NTgxMjc0N30.27LFqmsb1BM6prPXIxllncWdgxUMGqZuBuhZYwDYOuA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "vehicle_name",
+							"value": "Bajaj Pulsar",
+							"type": "text"
+						},
+						{
+							"key": "vehicle_image",
+							"type": "file",
+							"src": "/C:/Users/Lyceum/Desktop/img/bajaj-pulsar.jpg"
+						},
+						{
+							"key": "vehicle_number",
+							"value": "PB 10 EU 2458",
+							"type": "text"
+						},
+						{
+							"key": "vehicle_buy_date",
+							"value": "09-27-2022",
+							"type": "text"
+						},
+						{
+							"key": "purchase_state",
+							"value": "Punjab",
+							"type": "text"
+						},
+						{
+							"key": "vehicle_price",
+							"value": "100000",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/ecom/add-vehicle",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"ecom",
+						"add-vehicle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Vehicle",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTEzZDcyZjYyM2VkMTYyNGNkZGM4ODMiLCJpYXQiOjE2OTU4MTM3NTgsImV4cCI6MTY5NTgxNDY1OH0.-SVZO1yqvnAcSkj-u7cQpoNVgwFuO0_5z3FDmHBTYUA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:3000/ecom/all-vehicle",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"ecom",
+						"all-vehicle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buy Vehicle With One Time Payment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTE0MjAzZTFhMjY0YTgwZDA0MTc2MTQiLCJpYXQiOjE2OTU4ODQ3MDYsImV4cCI6MTY5NTkyMDcwNn0.I0J63bJvABS_2VPknezeKYaFEuWegX6kjZsDjiaEwHo",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:3000/ecom/buy-vehicle-one-time-payment/65141d47eab084ef9b19f6ce",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"ecom",
+						"buy-vehicle-one-time-payment",
+						"65141d47eab084ef9b19f6ce"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buy Vehicle With EMI",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTE0MjAzZTFhMjY0YTgwZDA0MTc2MTQiLCJpYXQiOjE2OTU4ODQ3MDYsImV4cCI6MTY5NTkyMDcwNn0.I0J63bJvABS_2VPknezeKYaFEuWegX6kjZsDjiaEwHo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"emiTerm\": 6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/ecom/buy-vehicle-emi/65141d47eab084ef9b19f6ce",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"ecom",
+						"buy-vehicle-emi",
+						"65141d47eab084ef9b19f6ce"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTEzY2UzOGVkYjc2ZGQ5NTFjZmE0NTMiLCJpYXQiOjE2OTU4OTE2MDgsImV4cCI6MTY5NTkyNzYwOH0.xyB-eMzBkwc4arkoc0NXGbeG7WyFeuRJNl8g6r4R-YY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:3000/admin/delete-user/65154208df435f744c842fa6",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"delete-user",
+						"65154208df435f744c842fa6"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

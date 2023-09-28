@@ -49,14 +49,18 @@ export const loginController = async (req,res) => {
         if(userData){
             const passwordMatch = await bcrypt.compare(req.body.password, userData.password);
             if(passwordMatch){
+                if(userData.isDeleted == false){
 
-                // JWT Authentication logic
-                const token = {
-                    accessToken: await createAccessToken(userData._id),
-                    refreshToken: await createRefreshToken(userData._id)
+                    // JWT Authentication logic
+                    const token = {
+                        accessToken: await createAccessToken(userData._id),
+                        refreshToken: await createRefreshToken(userData._id)
+                    }
+                    httpResponse(res, statusCode.OK, responseStatus.SUCCESS, responseMessage.LOGIN_SUCCESS, token);
+
+                }else{
+                    httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.USER_DELETED_ALERT);
                 }
-                httpResponse(res, statusCode.OK, responseStatus.SUCCESS, responseMessage.LOGIN_SUCCESS, token);
-
             }else{
                 httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.INCORRECT_CREDENTIALS);
             }
