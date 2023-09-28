@@ -21,6 +21,10 @@ const transactionSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    paid_amount:{
+        type: Number,
+        required: true
+    },
     date: { 
         type: Date,
         default: Date.now

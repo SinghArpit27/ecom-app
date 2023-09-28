@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 export const createAccessToken = async (userData) => {
     try {
         // console.log(process.env.JWT_SECRET);
-        const token = await jwt.sign({ _id: userData._id }, process.env.ACCESS_JWT_SECRET, { expiresIn: '15m' });
+        const token = await jwt.sign({ _id: userData._id }, process.env.ACCESS_JWT_SECRET, { expiresIn: '10h' });
         return token;
 
     } catch (error) {
@@ -16,7 +16,7 @@ export const createAccessToken = async (userData) => {
 export const createRefreshToken = async (userData) => {
     try {
         // console.log(process.env.JWT_SECRET);
-        const token = await jwt.sign({ _id: userData._id }, process.env.REFRESH_JWT_SECRET, { expiresIn: '2h' });
+        const token = await jwt.sign({ _id: userData._id }, process.env.REFRESH_JWT_SECRET, { expiresIn: '50h' });
         return token;
 
     } catch (error) {

@@ -24,9 +24,14 @@ const emiSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    received_emi: {
+        type: Number,
+        required: true,
+        default: 1
+    },
     dueDate: {
         type: Date,
-        required: true,
+        // required: true,
     },
 }, { timestamps: true });
 export default mongoose.model('EMI', emiSchema);
