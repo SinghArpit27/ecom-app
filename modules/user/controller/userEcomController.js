@@ -174,11 +174,16 @@ export const buyVehicleWithOneTimePayment = async(req,res) => {
                             const result = (amount * plateformPercent) / 100;
                             const remainingAmount = amount - result;
 
-                            const superAdminWallet = await Wallet.findById({ _id: '651ba671ee3ebeca522471b5'});
+                            
+                            const superAdminData = await User.findOne({ user_role: 1 });
+                            
+                            const superAdminWallet = await Wallet.findOne({ userId: superAdminData._id});
+                            // console.log(superAdminWallet);
+
                             const updatedSuperAdminWalletAmount = superAdminWallet.wallet_amount + result;
 
                             const updatedSuperAdminWallet = await Wallet.findByIdAndUpdate(
-                                { _id: '651ba671ee3ebeca522471b5' },
+                                { _id: superAdminWallet._id },
                                 { $set: { wallet_amount: updatedSuperAdminWalletAmount } }
                             );
 
@@ -268,7 +273,10 @@ export const buyVehicleWithEMI = async (req, res) => {
 
                                 // Calculate and add interest to the admin's wallet
                                 const interestAmount = emiAmount * interestRate;
-                                const adminWallet = await Wallet.findById('651ba671ee3ebeca522471b5'); // Replace with your admin's wallet ID
+                                
+                                const superAdminData = await User.findOne({ user_role: 1 });
+                                const adminWallet = await Wallet.findOne({ userId: superAdminData._id }); // Replace with your admin's wallet ID
+
                                 const updatedAdminWalletAmount = adminWallet.wallet_amount + interestAmount;
                                 await Wallet.findByIdAndUpdate(adminWallet._id, { $set: { wallet_amount: updatedAdminWalletAmount } });
 
