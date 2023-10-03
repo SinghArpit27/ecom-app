@@ -174,11 +174,11 @@ export const buyVehicleWithOneTimePayment = async(req,res) => {
                             const result = (amount * plateformPercent) / 100;
                             const remainingAmount = amount - result;
 
-                            const superAdminWallet = await Wallet.findById({ _id: '6513e92916bb7f8755a473b4'});
+                            const superAdminWallet = await Wallet.findById({ _id: '651ba671ee3ebeca522471b5'});
                             const updatedSuperAdminWalletAmount = superAdminWallet.wallet_amount + result;
 
                             const updatedSuperAdminWallet = await Wallet.findByIdAndUpdate(
-                                { _id: '6513e92916bb7f8755a473b4' },
+                                { _id: '651ba671ee3ebeca522471b5' },
                                 { $set: { wallet_amount: updatedSuperAdminWalletAmount } }
                             );
 
@@ -235,7 +235,7 @@ export const buyVehicleWithEMI = async (req, res) => {
         const vehicleId = req.params.id;
         const userId = req.userId;
         const emiTerm = req.body.emiTerm;
-        var roughJobCount = 0;
+        let roughJobCount = 0;
 
         const userData = await User.findOne({ _id: userId });
         if (userData) {
@@ -256,7 +256,8 @@ export const buyVehicleWithEMI = async (req, res) => {
                             // Wallet update (buyer, seller, admin)
 
 
-
+                            
+                            // 0 8 1 * *  =-> this cron is for 1st date of every months at 8 hr. 0 minute (AM)
                             // JOB Schedule
                             schedule.scheduleJob('my-job','*/5 * * * * *', async () => {
 
@@ -267,7 +268,7 @@ export const buyVehicleWithEMI = async (req, res) => {
 
                                 // Calculate and add interest to the admin's wallet
                                 const interestAmount = emiAmount * interestRate;
-                                const adminWallet = await Wallet.findById('6513e92916bb7f8755a473b4'); // Replace with your admin's wallet ID
+                                const adminWallet = await Wallet.findById('651ba671ee3ebeca522471b5'); // Replace with your admin's wallet ID
                                 const updatedAdminWalletAmount = adminWallet.wallet_amount + interestAmount;
                                 await Wallet.findByIdAndUpdate(adminWallet._id, { $set: { wallet_amount: updatedAdminWalletAmount } });
 
@@ -277,7 +278,7 @@ export const buyVehicleWithEMI = async (req, res) => {
                                 const sellerTotalEMI = emiAmount + interestAmount
                                 const updatedWalletAmount = walletData.wallet_amount - sellerTotalEMI;
                                 const buyerUpdatedWallet = await Wallet.findByIdAndUpdate(walletData._id, { $set: { wallet_amount: updatedWalletAmount } });
-                                console.log(sellerTotalEMI, "jhbh", buyerUpdatedWallet);
+                                // console.log(sellerTotalEMI, "jhbh", buyerUpdatedWallet);
 
 
                                 const transactionData = await Transaction.findOne({ vehicle_id: vehicleId  });

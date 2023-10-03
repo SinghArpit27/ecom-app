@@ -25,7 +25,7 @@ export const registerController = async (req,res) => {
                 });
                 const userData = await newUser.save();
 
-                console.log(userData);
+                // console.log(userData);
 
                 httpResponse(res, statusCode.CREATED, responseStatus.SUCCESS, responseMessage.USER_CREATED_SUCCESS, userData);
 
@@ -84,9 +84,24 @@ export const renewAccessTokenController = async (req,res) => {
 
                     const user = decoded; // The user data decoded from the token
                     const userData = await User.findById({ _id: user._id });
-                    // Create New Acces token
-                    const accessToken = await createAccessToken(userData._id);
-                    httpResponse(res, statusCode.OK, responseStatus.SUCCESS, responseMessage.SUCCESS, accessToken);
+                    if(userData){
+                        if(userData.isDeleted == false){
+            
+                            // Create New Acces token
+                            // const accessToken = await createAccessToken(userData._id);
+                            const token = {
+                                accessToken: await createAccessToken(userData._id),
+                                refreshToken: refreshToken
+                            }
+                            httpResponse(res, statusCode.OK, responseStatus.SUCCESS, responseMessage.SUCCESS, token);
+            
+                        }else{
+                            httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.USER_DELETED_ALERT);
+                        }
+            
+                    }else{
+                        httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.UNAUTHORIZED);
+                    }
 
                 } else {
                     // console.log("Not Verified refresh token")
@@ -96,7 +111,6 @@ export const renewAccessTokenController = async (req,res) => {
         }else{
             httpResponse(res, statusCode.UNAUTHORIZED, responseStatus.FAILURE, responseMessage.UNAUTHORIZED);
         }
-
     } catch (error) {
         httpResponse(res, statusCode.INTERNAL_SERVER_ERROR, responseStatus.FAILURE, responseMessage.INTERNAL_SERVER_ERROR, error.message);
     }
@@ -128,17 +142,28 @@ export const changePasswordController = async (req,res) => {
     try {
         
         const userId = req.userId;
-        const newPassword = await bcrypt.hash(req.body.password, 10);
 
-        const userData = await User.findByIdAndUpdate(
-            { _id: userId },
-            { $set: { password: newPassword }}
-        );
+        const userData = await User.findById({ _id: userId });
+        if(userData){
+            const passwordMatch = await bcrypt.compare(req.body.password, userData.password);
+            if(!passwordMatch){
+                if(userData.isDeleted == false){
 
-        if (!userData) {
-            httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.USER_NOT_FOUND);
+                    const newPassword = await bcrypt.hash(req.body.password, 10);
+                    const updatedUserData = await User.findByIdAndUpdate(
+                        { _id: userId },
+                        { $set: { password: newPassword }}
+                    );
+                    httpResponse(res, statusCode.OK, responseStatus.SUCCESS, responseMessage.PASSWORD_CHANGE_SUCCESS);
+
+                }else{
+                    httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.USER_DELETED_ALERT);
+                }
+            }else{
+                httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.OLD_PASSWORD_ALERT);
+            }
         }else{
-            httpResponse(res, statusCode.OK, responseStatus.SUCCESS, responseMessage.PASSWORD_CHANGE_SUCCESS);
+            httpResponse(res, statusCode.BAD_REQUEST, responseStatus.FAILURE, responseMessage.UNAUTHORIZED);
         }
     } catch (error) {
         httpResponse(res, statusCode.INTERNAL_SERVER_ERROR, responseStatus.FAILURE, responseMessage.INTERNAL_SERVER_ERROR, error.message);

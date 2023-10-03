@@ -30,6 +30,7 @@ export const responseMessage = {
   ADMIN_WALLET_NOT_FOUND: "Admin wallet not found",
   USER_DELETED_SUCCESS: "User deleted successfully",
   USER_DELETED_ALERT: "You can't Login, Your Account is Deleted",
+  OLD_PASSWORD_ALERT: "You can't enter old password, Please enter new one",
 
 
   // Testing Messages

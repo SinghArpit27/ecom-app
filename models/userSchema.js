@@ -33,4 +33,7 @@ const userSchema = new mongoose.Schema({
 },
 { timestamps: true });
 
+// Create an index on the email and phone fields
+// userSchema.index({ email: 1, phone: 1 }, { unique: true });
+
 export default mongoose.model("User", userSchema);
